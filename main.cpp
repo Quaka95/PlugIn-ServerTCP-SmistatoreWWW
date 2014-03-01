@@ -18,20 +18,11 @@ int main(int argc, char const *argv[])
 	char* msg = "ERRORE";
 
 	Address* addr = new Address("127.0.0.1",SERVER_PORT);
-	ClientTCP* client = new ClientTCP();
 	ServerTCP* server = new ServerTCP(SERVER_PORT);
-	Conn_Server* conn;
+	Conn_Server* client;
 
-	conn=server->accetta();
-	client->connetti();
-	client->invia("Ciao Mario",addr);
-	msg = conn->ricevi(addr);
+	client = server->accetta(NULL)
 
-	cout << msg << endl;
 
-	delete(addr);
-	delete(client);
-	delete(server);
-	delete(conn);
 	return 0;
 }
