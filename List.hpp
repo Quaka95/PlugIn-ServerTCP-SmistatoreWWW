@@ -8,7 +8,7 @@ class Nodo
 	public:
 		Nodo():Nodo(NULL){}
 		Nodo(Nodo* next){
-			set_next(mext);
+			set_next(next);
 		}
 		~Nodo();
 		void	set_next(Nodo* next){
@@ -19,34 +19,7 @@ class Nodo
 		}
 };
 
-class Iterator;	//Uso lista dentro iterator
-
-class Lista
-{
-private:
-	Nodo* _first;
-	void remove_Nodo(Nodo* curr) {
-		if(curr){
-			remove_Nodo(curr->get_next());
-			delete(curr);
-		}
-	};
-public:
-	Lista(Nodo* first){
-		add_Node(first);
-	}
-	~Lista() { remove_Nodo(first); 	};
-	Nodo* add_Node(Nodo* add){
-		add->set_next(_first);
-		_first = add;
-	}
-	Iterator* create_Iterator(){
-		return new Iterator(this);
-	}
-	Nodo* get_first(){
-		return _first;
-	}
-};
+class Lista;
 
 class Iterator
 {
@@ -56,7 +29,7 @@ private:
 public:
 	Iterator(Lista* lista){
 		_lista = lista;
-		_current=_lista->getFirst();
+		_current=_lista->get_first();
 	}
 	~Iterator(){}
 
@@ -77,6 +50,33 @@ public:
 	}
 	bool is_done(){
 		return !(_current->get_next());
+	}
+};
+
+class Lista
+{
+private:
+	Nodo* _first;
+	void remove_Nodo(Nodo* curr) {
+		if(curr){
+			remove_Nodo(curr->get_next());
+			delete(curr);
+		}
+	};
+public:
+	Lista(Nodo* first){
+		add_Node(first);
+	}
+	~Lista() { remove_Nodo(_first); 	};
+	Nodo* add_Node(Nodo* add){
+		add->set_next(_first);
+		_first = add;
+	}
+	Iterator* create_Iterator(){
+		return (new Iterator(this));
+	}
+	Nodo* get_first(){
+		return _first;
 	}
 };
 

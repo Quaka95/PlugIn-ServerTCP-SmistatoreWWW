@@ -17,12 +17,13 @@ class Connessione : public Nodo
 	protected:
 		int _conn_id;
 	public:
-		Connessione(int conn_id, Node* next=NULL):Node(next){
+		Connessione(int conn_id, Nodo* next=NULL):Nodo(next){
 			_conn_id=conn_id;
 		}
 		~Connessione(){}
 		bool	invia(char* msg){	//send()
-			int lin_msg;
+			int len_msg;
+			int ret;
 
 			len_msg = strlen(msg)+1;
 			ret = send(_conn_id,msg,len_msg,0);
@@ -30,7 +31,9 @@ class Connessione : public Nodo
 		}
 		char*	ricevi(){	//recv()
 			char buffer[MAX_BUFFER+1];
-			ret = recv(_conn_idco,buffer,MAX_BUFFER,0);
+			int ret;
+
+			ret = recv(_conn_id,buffer,MAX_BUFFER,0);
 
 			if(ret<1){
 				return NULL;
@@ -53,7 +56,7 @@ public:
 class Conn_Server : public Connessione
 {
 public:
-	Conn_Server(int conn_id):Connessione(sock_id){}
+	Conn_Server(int conn_id):Connessione(conn_id){}
 	~Conn_Server(){	//Close
 		close(super->_conn_id);
 	}	
@@ -121,7 +124,7 @@ class ServerTCP : SocketTCP
 
 			con=new Conn_Server(id);
 
-			lista_connessione->add_Node(con);
+			lista_connessione->add_Nodo(con);
 			return con;
 		}	
 		void close_tutte_connessioni(){

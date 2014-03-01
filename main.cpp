@@ -1,3 +1,7 @@
+/*FOR COMPILE: clear; g++ main.cpp -Wno-format-security -Wno-write-strings -std=c++11*/
+#define MAX_BUFFER 4096
+#define SERVER_PORT 9000
+
 #include <iostream>
 using namespace std;
 
@@ -9,9 +13,8 @@ using namespace std;
 #include "errore.h"
 #include "Socket.hpp"
 #include "Address.hpp"
+#include "List.hpp"
 #include "TCP.hpp"
-
-#define SERVER_PORT 9000
 
 int main(int argc, char const *argv[])
 {
@@ -21,7 +24,7 @@ int main(int argc, char const *argv[])
 	ServerTCP* server = new ServerTCP(SERVER_PORT);
 	Conn_Server* client;
 
-	client = server->accetta(NULL)
+	client = server->accetta(NULL);
 
 
 	return 0;
