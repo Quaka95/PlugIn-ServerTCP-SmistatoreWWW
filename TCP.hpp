@@ -58,7 +58,7 @@ class Conn_Server : public Connessione
 public:
 	Conn_Server(int conn_id):Connessione(conn_id){}
 	~Conn_Server(){	//Close
-		close(super->_conn_id);
+		close(Connessione::_conn_id);
 	}	
 };
 
@@ -71,7 +71,7 @@ class ClientTCP : public SocketTCP
 		~ ClientTCP(){}
 		Conn_Client*	connetti(Address* server){	//connect()
 			int ret;
-			ret=connect(get_sock_id(),(struct sockaddr*) server->dest->get_addr(),(socklen_t)sizeof(struct sockaddr));
+			ret=connect(get_sock_id(),(struct sockaddr*) server->get_addr(),(socklen_t)sizeof(struct sockaddr));
 			if(ret){ return NULL; }
 			connessione = new Conn_Client(get_sock_id());
 			return connessione;
@@ -113,32 +113,32 @@ class ServerTCP : SocketTCP
 		Conn_Server*	accetta(Address* client){ //accept()
 			Conn_Server* conn;
 			int id;
-			int len_addr = sizeof(Addr);
+			int len_addr;
 
-			len_addr = sizeof(Addr);
+			len_addr = sizeof(struct sockaddr_in);
 			id = accept(get_sock_id(), (struct sockaddr*) client->get_addr(),(socklen_t*) &len_addr);
 
 			if(id<=0){
 				return NULL;
 			}
 
-			con=new Conn_Server(id);
+			conn=new Conn_Server(id);
 
-			lista_connessione->add_Nodo(con);
-			return con;
+			lista_connessione->add_Nodo(conn);
+			return conn;
 		}	
 		void close_tutte_connessioni(){
-			Iterator index = lista_connessione->create_Iterator();
+			Iterator* index = lista_connessione->create_Iterator();
 			do{
 				delete(index->get_current());
-				index->get_next();
+				index->move_next();
 			}while(index->is_done());
 		}
 		void invia_a_tutti(char* msg){
-			Iterator index = lista_connessione->create_Iterator();
+			Iterator* index = lista_connessione->create_Iterator();
 			do{
 				((Conn_Server*)index->get_current())->invia(msg);
-				index->get_next();
+				index->move_next();
 			}while(index->is_done());
 		}
 
