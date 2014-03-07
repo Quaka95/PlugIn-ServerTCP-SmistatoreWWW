@@ -16,6 +16,7 @@ class Socket
 		}
 		~Socket(){ //shutdown
 			shutdown(sock_id, SHUT_RDWR);
+			close(sock_id);
 		}
 		int get_sock_id(){
 			return sock_id;
