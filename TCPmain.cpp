@@ -19,7 +19,7 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
 	char* msgrec = "";
-	char* msg = "HTTP/1.1 404 OK\n\
+	char* msg = "HTTP/1.1 200 OK\n\
 Date: Mon, 23 May 2005 22:38:34 GMT\n\
 Server: Apache/1.3.3.7 (Unix) (Red-Hat/Linux)\n\
 Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT\n\
