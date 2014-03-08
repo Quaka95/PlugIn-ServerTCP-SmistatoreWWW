@@ -9,17 +9,28 @@ class Socket
 {
 	private:	
 		int sock_id;
-	public:		
-		Socket(int mode){	//socket()
+		SocketLogWriter log;
+	public:
+		
+				
+		Socket(int mode, char* path){
+			log = new SocketLogWriter(path);
 			sock_id=socket(AF_INET,mode,0);
-			if(sock_id<0) { errore("Errore Socket Server",-1); }
+			if(sock_id<0) {log.write("Socket Non Creato");
+			 	errore("Errore Socket Server",-1);
+			 }
+			log.write("Socket Creato con Successo");
 		}
-		~Socket(){ //shutdown
+		~Socket(){ 
 			shutdown(sock_id, SHUT_RDWR);
-			close(sock_id);
 		}
 		int get_sock_id(){
 			return sock_id;
+		}
+		
+		void WriteLog(char* stringa)
+		{
+			log.write(stringa);
 		}
 };
 
