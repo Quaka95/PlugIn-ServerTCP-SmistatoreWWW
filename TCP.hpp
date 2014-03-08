@@ -6,7 +6,7 @@ class SocketTCP: public Socket
 {
 	private:
 	public:
-		SocketTCP() : Socket(SOCK_STREAM){
+		SocketTCP() : Socket(SOCK_STREAM,"./log.txt"){
 		}
 		~ SocketTCP(){
 		}
@@ -27,6 +27,18 @@ class Connessione : public Nodo
 
 			len_msg = strlen(msg)+1;
 			ret = send(_conn_id,msg,len_msg,0);
+			if (ret==len_msg)
+			{
+				char* str = "\"";
+				str = strcat(str,msg);
+				str = strcat(str,"\" Inviato alla connessione: ");
+				str = strcat(str,(char*)_conn_id); 
+				WriteLog(str);
+			}
+			else
+			{
+				WriteLog("Errore nell'invio");
+			}
 			return (ret==len_msg);
 		}
 		char*	ricevi(){	//recv()
@@ -36,11 +48,15 @@ class Connessione : public Nodo
 			ret = recv(_conn_id,buffer,MAX_BUFFER,0);
 
 			if(ret<1){
+				WriteLog("Impossibile ricevere");
 				return NULL;
 			}
 
 			buffer[ret]='\0';
-
+			char* str = "\"";
+			str = strcat(str,strdup(buffer));
+			str = strcat(str,"\" Ricevuto da");
+			WriteLog(str);
 			return strdup(buffer);
 		}
 };
@@ -76,7 +92,12 @@ class ClientTCP : public SocketTCP
 			connessione = new Conn_Client(get_sock_id());
 			return connessione;
 		}
-		bool	close_con() { delete(connessione); }
+		bool	close_con() {
+			delete(connessione);
+			char* str = "Chiusa la connessione ";
+			str = strcat(str, char* connessione->_get_conn_id);
+			WriteLog(str);
+		}
 		bool	invia(char* msg) { return connessione->invia(msg); };
 		char*	ricevi() { return connessione->ricevi(); };
 };
